@@ -25,4 +25,4 @@ if [ ! -d "$DIR/build/apache-rat-0.12" ]; then
 fi
 java -jar $DIR/build/apache-rat-0.12/apache-rat-0.12.jar $DIR -e .dockerignore -e public -e apache-rat-0.12 -e .git -e .gitignore
 docker build -t apache/ozone .
-docker tag apache/ozone apache/ozone:0.3.0-alpha
+docker tag apache/ozone apache/ozone:0.4.0-alpha
