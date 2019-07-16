@@ -50,6 +50,11 @@ RUN mkdir -p /etc/security/keytabs && chmod -R a+wr /etc/security/keytabs
 ADD krb5.conf /etc/
 RUN yum install -y krb5-workstation
 
+# CSI / k8s / fuse / goofys dependency
+RUN wget https://github.com/kahing/goofys/releases/download/v0.20.0/goofys -O /usr/bin/goofys
+RUN chmod 755 /usr/bin/goofys
+RUN yum install -y fuse
+
 #Make it compatible with any UID/GID (write premission may be missing to /opt/hadoop
 RUN mkdir -p /etc/hadoop && mkdir -p /var/log/hadoop && chmod 1777 /etc/hadoop && chmod 1777 /var/log/hadoop
 ENV HADOOP_LOG_DIR=/var/log/hadoop
