@@ -24,7 +24,7 @@ services:
       env_file:
         - ./docker-config
    ozoneManager:
-      image: apache/ozone:0.3.0-alpha
+      image: apache/ozone:0.3.0
       ports:
          - 9874:9874
       environment:
