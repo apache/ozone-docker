@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM apache/hadoop-runner
+FROM apache/ozone-runner:20190717-1
 ARG OZONE_URL=https://www.apache.org/dyn/mirrors/mirrors.cgi?action=download&filename=hadoop/ozone/ozone-0.4.0-alpha/hadoop-ozone-0.4.0-alpha.tar.gz
 WORKDIR /opt
 RUN sudo rm -rf /opt/hadoop && wget $OZONE_URL -O ozone.tar.gz && tar zxf ozone.tar.gz && rm ozone.tar.gz && mv ozone* hadoop

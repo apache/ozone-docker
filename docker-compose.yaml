@@ -23,7 +23,7 @@ services:
       command: ["ozone","datanode"]
       env_file:
         - ./docker-config
-   ozoneManager:
+   om:
       image: apache/ozone:0.4.0
       ports:
          - 9874:9874
