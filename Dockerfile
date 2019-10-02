@@ -12,14 +12,18 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-FROM docker:18.09.1-dind
-RUN apk add --update --no-cache bash alpine-sdk maven jq grep openjdk8 py-pip rsync procps autoconf automake libtool findutils
+FROM docker:18.09.1
+RUN apk add --update --no-cache bash alpine-sdk maven jq grep openjdk8 py-pip rsync procps autoconf automake libtool findutils coreutils
 
 #Install real glibc
 RUN apk --no-cache add ca-certificates wget && \
     wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub && \
     wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.28-r0/glibc-2.28-r0.apk && \
-    apk add glibc-2.28-r0.apk
+    apk add glibc-2.28-r0.apk && \
+    wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.28-r0/glibc-bin-2.28-r0.apk && \
+    apk add glibc-bin-2.28-r0.apk && \
+    wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.28-r0/glibc-i18n-2.28-r0.apk && \
+    apk add glibc-i18n-2.28-r0.apk
 
 #Install protobuf
 RUN mkdir -p /usr/local/src/ && \
@@ -40,7 +44,7 @@ RUN mkdir -p /opt && \
 
 #Install apache-ant
 RUN mkdir -p /opt && \
-    curl -sL 'https://www.apache.org/dyn/mirrors/mirrors.cgi?action=download&filename=/ant/binaries/apache-ant-1.10.5-bin.tar.gz' | tar -xz  && \
+    curl -sL 'https://www.apache.org/dyn/mirrors/mirrors.cgi?action=download&filename=/ant/binaries/apache-ant-1.10.7-bin.tar.gz' | tar -xz  && \
        mv apache-ant* /opt/ant
 
 #Install docker-compose (for smoketests)
@@ -70,7 +74,7 @@ USER jenkins1000
 RUN cd /tmp && \
    git clone --depth=1 https://github.com/apache/hadoop.git -b trunk && \
    cd /tmp/hadoop && \
-   mvn package dependency:go-offline -DskipTests -P hdds -pl :hadoop-ozone-dist -am && \
+   mvn package dependency:go-offline -DskipTests -f pom.ozone.xml && \
    rm -rf /home/user/.m2/repository/org/apache/hadoop/*hdds* && \
    rm -rf /home/user/.m2/repository/org/apache/hadoop/*ozone* && \
    rm -rf /tmp/hadoop && \
@@ -79,9 +83,20 @@ RUN cd /tmp && \
 USER root
 
 RUN echo "ALL ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-ENV DOCKER_HOST=unix:///var/run/dockeri.sock
 
-ADD entrypoint.sh /usr/local/bin/entrypoint.sh
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+RUN ln -s /home/user/.m2 /root/.m2
 
+#blockade test
+RUN pip install virtualenv && virtualenv /opt/blockade && /opt/blockade/bin/pip install pytest==2.8.7 blockade
+ENV PATH=$PATH:/opt/blockade/bin
 
+#kubectl
+RUN cd /usr/local/bin && \
+   curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && \
+   chmod +x ./kubectl
+
+RUN pip install robotframework
+
+RUN curl -sL https://github.com/muquit/mailsend-go/releases/download/v1.0.5/mailsend-go_1.0.5_linux-64bit.tar.gz | tar zxf - && mv mailsend-go-dir/mailsend-go /usr/local/bin/ && rm -rf mailsend-go-dir
+
+USER jenkins1000
