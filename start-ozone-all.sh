@@ -22,7 +22,7 @@ ozone datanode &
 #wait for scm startup
 export WAITFOR=localhost:9876
 
-/opt/starter.sh ozone om --init
-/opt/starter.sh ozone om &
+/opt/hadoop/bin/docker/entrypoint.sh ozone om --init
+/opt/hadoop/bin/docker/entrypoint.sh ozone om &
 sleep 15
-/opt/starter.sh ozone s3g
+/opt/hadoop/bin/docker/entrypoint.sh ozone s3g
