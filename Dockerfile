@@ -36,7 +36,7 @@ RUN mkdir -p /opt/profiler && \
 
 ENV JAVA_HOME=/usr/lib/jvm/jre/
 
-ENV PATH /opt/hadoop/bin/docker:$PATH:/opt/hadoop/bin
+ENV PATH /opt/hadoop/libexec:$PATH:/opt/hadoop/bin
 
 RUN groupadd --gid 1000 hadoop
 RUN useradd --uid 1000 hadoop --gid 100 --home /opt/hadoop
