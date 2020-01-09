@@ -82,6 +82,8 @@ RUN curl -sL https://github.com/muquit/mailsend-go/releases/download/v1.0.5/mail
 
 RUN curl -L https://github.com/elek/flekszible/releases/download/v1.5.2/flekszible_1.5.2_Linux_x86_64.tar.gz | tar zx && mv flekszible /usr/local/bin && chmod +x /usr/local/bin/flekszible
 
+RUN curl -LSs https://github.com/gohugoio/hugo/releases/download/v0.62.2/hugo_0.62.2_Linux-64bit.tar.gz | tar zxf - hugo && mv hugo /usr/local/bin/ && chmod +x /usr/local/bin/hugo
+
 USER jenkins1000
 
 #This is a very huge local maven cache. Usually the mvn repository is not safe to be 
