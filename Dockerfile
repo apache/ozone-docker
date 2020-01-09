@@ -93,9 +93,9 @@ USER jenkins1000
 #To be sure that we have no dev bits from this build, we will remove org.apache.hadoop files
 #from the local maven repository.
 
-RUN cd /tmp && git clone --depth=1 https://github.com/apache/hadoop.git -b trunk && \
-   cd /tmp/hadoop && mvn -B package dependency:go-offline -DskipTests=true -f pom.ozone.xml && \
+RUN cd /tmp && git clone --depth=1 https://github.com/apache/hadoop-ozone.git -b master && \
+   cd /tmp/hadoop-ozone && mvn -B package dependency:go-offline -DskipTests=true && \
    rm -rf /home/user/.m2/repository/org/apache/hadoop/*hdds* && \
    rm -rf /home/user/.m2/repository/org/apache/hadoop/*ozone* && \
-   rm -rf /tmp/hadoop && \ 
+   rm -rf /tmp/hadoop-ozone && \
    find /home/user/.m2/repository -exec chmod go+wx {} \;
