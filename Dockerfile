@@ -16,10 +16,10 @@
 
 FROM centos@sha256:b5e66c4651870a1ad435cd75922fe2cb943c9e973a9673822d1414824a1d0475
 RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-RUN yum install -y sudo python2-pip wget nmap-ncat jq java-11-openjdk
+RUN yum install -y sudo python3 python3-pip wget nmap-ncat jq java-11-openjdk
 
 #For executing inline smoketest
-RUN pip install robotframework
+RUN pip3 install robotframework
 
 #dumb init for proper init handling
 RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.0/dumb-init_1.2.0_amd64
@@ -48,6 +48,7 @@ RUN chown hadoop /opt
 #Be prepared for kerbebrizzed cluster
 RUN mkdir -p /etc/security/keytabs && chmod -R a+wr /etc/security/keytabs 
 ADD krb5.conf /etc/
+RUN chmod 644 /etc/krb5.conf
 RUN yum install -y krb5-workstation
 
 # CSI / k8s / fuse / goofys dependency
@@ -61,9 +62,11 @@ ENV HADOOP_LOG_DIR=/var/log/hadoop
 ENV HADOOP_CONF_DIR=/etc/hadoop
 RUN mkdir /data && chmod 1777 /data
 
+#default entrypoint (used only if the ozone dir is not bindmounted)
+ADD entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod 755 /usr/local/bin/entrypoint.sh
+
 WORKDIR /opt/hadoop
 USER hadoop
 
-#default entrypoint (used only if the ozone dir is not bindmounted)
-ADD entrypoint.sh /usr/local/bin/entrypoint.sh
 ENTRYPOINT ["/usr/local/bin/dumb-init", "--", "entrypoint.sh"]
