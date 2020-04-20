@@ -14,9 +14,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+FROM golang:1.14.2-buster
+RUN GO111MODULE=off go get -u github.com/rexray/gocsi/csc
+
 FROM centos@sha256:b5e66c4651870a1ad435cd75922fe2cb943c9e973a9673822d1414824a1d0475
 RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 RUN yum install -y sudo python3 python3-pip wget nmap-ncat jq java-11-openjdk
+COPY --from=0 /go/bin/csc /usr/bin/csc
 
 #For executing inline smoketest
 RUN pip3 install robotframework
