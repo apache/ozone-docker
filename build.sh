@@ -15,14 +15,20 @@
 # limitations under the License.
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-set -e
+set -eu
 mkdir -p build
-if [ ! -d "$DIR/build/apache-rat-0.12" ]; then
-   wget "https://www.apache.org/dyn/mirrors/mirrors.cgi?action=download&filename=creadur/apache-rat-0.13/apache-rat-0.13-bin.tar.gz" -O "$DIR/build/apache-rat.tar.gz"
-	cd $DIR/build
-	tar zvxf apache-rat.tar.gz
-	cd -
+if [ ! -d "$DIR/build/apache-rat-0.13" ]; then
+  if type wget 2> /dev/null; then
+    wget "https://www.apache.org/dyn/mirrors/mirrors.cgi?action=download&filename=creadur/apache-rat-0.13/apache-rat-0.13-bin.tar.gz" -O "$DIR/build/apache-rat.tar.gz"
+  elif type curl 2> /dev/null; then
+    curl -LSs "https://www.apache.org/dyn/mirrors/mirrors.cgi?action=download&filename=creadur/apache-rat-0.13/apache-rat-0.13-bin.tar.gz" -o "$DIR/build/apache-rat.tar.gz"
+  else
+    exit 1
+  fi
+  cd $DIR/build
+  tar zvxf apache-rat.tar.gz
+  cd -
 fi
 java -jar $DIR/build/apache-rat-0.13/apache-rat-0.13.jar $DIR -e .dockerignore -e public -e apache-rat-0.13 -e .git -e .gitignore
-docker build -t apache/ozone .
-docker tag apache/ozone apache/ozone:0.4.0-alpha
+docker build --build-arg OZONE_URL -t apache/ozone .
+docker tag apache/ozone apache/ozone:0.5.0

@@ -13,15 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM apache/ozone-runner:20190717-1
-ARG OZONE_URL=https://www.apache.org/dyn/mirrors/mirrors.cgi?action=download&filename=hadoop/ozone/ozone-0.4.1-alpha/hadoop-ozone-0.4.1-alpha.tar.gz
+FROM apache/ozone-runner:20191107-1
+ARG OZONE_URL=https://www.apache.org/dyn/mirrors/mirrors.cgi?action=download&filename=hadoop/ozone/ozone-0.5.0-beta/hadoop-ozone-0.5.0-beta.tar.gz
 WORKDIR /opt
 RUN sudo rm -rf /opt/hadoop && wget $OZONE_URL -O ozone.tar.gz && tar zxf ozone.tar.gz && rm ozone.tar.gz && mv ozone* hadoop
 WORKDIR /opt/hadoop
-ADD log4j.properties /opt/hadoop/etc/hadoop/log4j.properties
-ADD ozone-site.xml /opt/hadoop/etc/hadoop/ozone-site.xml
-RUN sudo chown -R hadoop:users /opt/hadoop/etc/hadoop/*
-ADD start-ozone-all.sh /usr/local/bin/start-ozone-all.sh
-ADD docker-compose.yaml /opt/hadoop/
-ADD docker-config /opt/hadoop/
+COPY log4j.properties /opt/hadoop/etc/hadoop/log4j.properties
+COPY ozone-site.xml /opt/hadoop/etc/hadoop/ozone-site.xml
+RUN sudo chown -R hadoop:users /opt/hadoop/etc/hadoop
+COPY --chown=hadoop:users start-ozone-all.sh /usr/local/bin/
+COPY --chown=hadoop:users docker-compose.yaml /opt/hadoop/
+COPY --chown=hadoop:users docker-config /opt/hadoop/
 CMD ["/usr/local/bin/start-ozone-all.sh"]
