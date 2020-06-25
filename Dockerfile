@@ -17,10 +17,45 @@
 FROM golang:1.14.2-buster
 RUN GO111MODULE=off go get -u github.com/rexray/gocsi/csc
 
+FROM centos:7.6.1810
+RUN yum -y install \
+        bzip2-devel \
+        gcc gcc-c++ gcc48-c++ \
+        git \
+        lz4-devel \
+        make \
+        snappy-devel \
+        which \
+        zlib-devel
+RUN git clone https://github.com/gflags/gflags.git \
+      && cd gflags \
+      && git checkout v2.0 \
+      && ./configure && make && make install
+RUN curl -LSs -o zstd-1.1.3.tar.gz https://github.com/facebook/zstd/archive/v1.1.3.tar.gz \
+      && tar zxvf zstd-1.1.3.tar.gz \
+      && cd zstd-1.1.3 \
+      && make && make install
+RUN curl -LSs -o rocksdb-6.8.1.tar.gz https://github.com/facebook/rocksdb/archive/v6.8.1.tar.gz \
+      && tar xzvf rocksdb-6.8.1.tar.gz \
+      && cd rocksdb-6.8.1 \
+      && make ldb
+
 FROM centos@sha256:b5e66c4651870a1ad435cd75922fe2cb943c9e973a9673822d1414824a1d0475
 RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-RUN yum install -y sudo python3 python3-pip wget nmap-ncat jq java-11-openjdk
+RUN yum install -y \
+      bzip2 \
+      java-11-openjdk \
+      jq \
+      nmap-ncat \
+      python3 python3-pip \
+      snappy \
+      sudo \
+      wget \
+      zlib
+
 COPY --from=0 /go/bin/csc /usr/bin/csc
+COPY --from=1 /rocksdb-6.8.1/ldb /usr/local/bin/ldb
+COPY --from=1 /usr/local/lib /usr/local/lib/
 
 #For executing inline smoketest
 RUN pip3 install robotframework
@@ -39,7 +74,7 @@ RUN mkdir -p /opt/profiler && \
     curl -L https://github.com/jvm-profiling-tools/async-profiler/releases/download/v1.5/async-profiler-1.5-linux-x64.tar.gz | tar xvz
 
 ENV JAVA_HOME=/usr/lib/jvm/jre/
-
+ENV LD_LIBRARY_PATH /usr/local/lib
 ENV PATH /opt/hadoop/libexec:$PATH:/opt/hadoop/bin
 
 RUN groupadd --gid 1000 hadoop
