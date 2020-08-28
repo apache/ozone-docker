@@ -100,4 +100,4 @@ RUN cd /tmp && git clone --depth=1 https://github.com/apache/hadoop-ozone.git -b
    rm -rf /home/user/.m2/repository/org/apache/hadoop/*hdds* && \
    rm -rf /home/user/.m2/repository/org/apache/hadoop/*ozone* && \
    rm -rf /tmp/hadoop-ozone && \
-   find /home/user/.m2/repository -exec chmod go+wx {} \; # ozone master: 798e00c97
+   find /home/user/.m2/repository -exec chmod go+wx {} \; # ozone master: f64bc6ed3
