@@ -19,12 +19,24 @@ RUN yum -y install gcc gcc-c++ kernel-devel make autoconf automake libtool which
    docker \
    python-pip \ 
    file python-devel \
-   git \
+   curl-devel dh-autoreconf expat-devel getopt gettext-devel openssl-devel perl-devel zlib-devel \
    jq \
    sudo
 
-#Install protobuf
 ENV LD_LIBRARY_PATH=/usr/lib
+
+# Install git
+RUN mkdir -p /usr/local/src/ && \
+    cd /usr/local/src/ && \
+    curl -sL https://www.kernel.org/pub/software/scm/git/git-2.29.2.tar.gz | tar xz && \
+    cd git-2.29.2 && \
+    make configure && \
+    ./configure --prefix=/usr && \
+    make all && \
+    make install && \
+    git --version
+
+#Install protobuf
 RUN mkdir -p /usr/local/src/ && \
     cd /usr/local/src/ && \
     curl -sL https://github.com/google/protobuf/releases/download/v2.5.0/protobuf-2.5.0.tar.gz | tar xz && \
