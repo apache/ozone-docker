@@ -17,14 +17,14 @@
 version: "3"
 services:
    datanode:
-      image: apache/ozone:0.3.0
+      image: apache/ozone:1.1.0
       ports:
         - 9864
       command: ["ozone","datanode"]
       env_file:
         - ./docker-config
    ozoneManager:
-      image: apache/ozone:0.3.0-alpha
+      image: apache/ozone:1.1.0
       ports:
          - 9874:9874
       environment:
@@ -34,7 +34,7 @@ services:
           - ./docker-config
       command: ["ozone","om"]
    scm:
-      image: apache/ozone:0.3.0
+      image: apache/ozone:1.1.0
       ports:
          - 9876:9876
       env_file:
@@ -43,7 +43,7 @@ services:
           ENSURE_SCM_INITIALIZED: /data/metadata/scm/current/VERSION
       command: ["ozone","scm"]
    s3g:
-      image: apache/ozone:0.3.0
+      image: apache/ozone:1.1.0
       ports:
          - 9878:9878
       env_file:
