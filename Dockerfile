@@ -18,10 +18,10 @@ ARG OZONE_URL=https://www.apache.org/dyn/mirrors/mirrors.cgi?action=download&fil
 WORKDIR /opt
 RUN sudo rm -rf /opt/hadoop && wget $OZONE_URL -O ozone.tar.gz && tar zxf ozone.tar.gz && rm ozone.tar.gz && mv ozone* hadoop
 WORKDIR /opt/hadoop
-ADD log4j.properties /opt/hadoop/etc/hadoop/log4j.properties
-ADD ozone-site.xml /opt/hadoop/etc/hadoop/ozone-site.xml
-RUN sudo chown -R hadoop:users /opt/hadoop/etc/hadoop/*
-ADD start-ozone-all.sh /usr/local/bin/start-ozone-all.sh
-ADD docker-compose.yaml /opt/hadoop/
-ADD docker-config /opt/hadoop/
+COPY log4j.properties /opt/hadoop/etc/hadoop/log4j.properties
+COPY ozone-site.xml /opt/hadoop/etc/hadoop/ozone-site.xml
+RUN sudo chown -R hadoop:users /opt/hadoop/etc/hadoop
+COPY --chown=hadoop:users start-ozone-all.sh /usr/local/bin/
+COPY --chown=hadoop:users docker-compose.yaml /opt/hadoop/
+COPY --chown=hadoop:users docker-config /opt/hadoop/
 CMD ["/usr/local/bin/start-ozone-all.sh"]

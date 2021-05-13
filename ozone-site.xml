@@ -21,4 +21,6 @@
 <property><name>ozone.metadata.dirs</name><value>/tmp/metadata</value></property>
 <property><name>ozone.scm.names</name><value>localhost</value></property>
 <property><name>ozone.om.address</name><value>localhost</value></property>
+<property><name>ozone.recon.db.dir</name><value>/tmp/metadata/recon</value></property>
+<property><name>ozone.recon.address</name><value>localhost:9891</value></property>
 </configuration>
