@@ -24,4 +24,6 @@ RUN sudo chown -R hadoop:users /opt/hadoop/etc/hadoop
 COPY --chown=hadoop:users start-ozone-all.sh /usr/local/bin/
 COPY --chown=hadoop:users docker-compose.yaml /opt/hadoop/
 COPY --chown=hadoop:users docker-config /opt/hadoop/
+ENV OZONE_CONF_DIR=/etc/hadoop
+ENV OZONE_LOG_DIR=/var/log/hadoop
 CMD ["/usr/local/bin/start-ozone-all.sh"]
