@@ -43,7 +43,7 @@ services:
          ENSURE_SCM_INITIALIZED: /data/metadata/scm/current/VERSION
       command: ["ozone","scm"]
    recon:
-      image: apache/ozone:1.0.0
+      image: apache/ozone:1.1.0
       ports:
          - 9888:9888
       env_file:
