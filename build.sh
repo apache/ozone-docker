@@ -19,9 +19,9 @@ set -eu
 mkdir -p build
 if [ ! -d "$DIR/build/apache-rat-0.13" ]; then
   if type wget 2> /dev/null; then
-    wget "https://www.apache.org/dyn/mirrors/mirrors.cgi?action=download&filename=creadur/apache-rat-0.13/apache-rat-0.13-bin.tar.gz" -O "$DIR/build/apache-rat.tar.gz"
+    wget "https://dlcdn.apache.org/creadur/apache-rat-0.13/apache-rat-0.13-bin.tar.gz" -O "$DIR/build/apache-rat.tar.gz"
   elif type curl 2> /dev/null; then
-    curl -LSs "https://www.apache.org/dyn/mirrors/mirrors.cgi?action=download&filename=creadur/apache-rat-0.13/apache-rat-0.13-bin.tar.gz" -o "$DIR/build/apache-rat.tar.gz"
+    curl -LSs "https://dlcdn.apache.org/creadur/apache-rat-0.13/apache-rat-0.13-bin.tar.gz" -o "$DIR/build/apache-rat.tar.gz"
   else
     exit 1
   fi
@@ -31,4 +31,4 @@ if [ ! -d "$DIR/build/apache-rat-0.13" ]; then
 fi
 java -jar $DIR/build/apache-rat-0.13/apache-rat-0.13.jar $DIR -e .dockerignore -e public -e apache-rat-0.13 -e .git -e .gitignore
 docker build --build-arg OZONE_URL -t apache/ozone .
-docker tag apache/ozone apache/ozone:1.1.0
+docker tag apache/ozone apache/ozone:1.2.0

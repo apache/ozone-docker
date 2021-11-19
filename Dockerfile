@@ -14,7 +14,7 @@
 # limitations under the License.
 
 FROM apache/ozone-runner:20210329-1
-ARG OZONE_URL=https://www.apache.org/dyn/mirrors/mirrors.cgi?action=download&filename=ozone/1.1.0/ozone-1.1.0.tar.gz
+ARG OZONE_URL=https://dlcdn.apache.org/ozone/1.2.0/ozone-1.2.0.tar.gz
 WORKDIR /opt
 RUN sudo rm -rf /opt/hadoop && wget $OZONE_URL -O ozone.tar.gz && tar zxf ozone.tar.gz && rm ozone.tar.gz && mv ozone* hadoop
 WORKDIR /opt/hadoop
