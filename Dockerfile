@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM apache/ozone-runner:20210329-1
+FROM apache/ozone-runner:20210520-1
 ARG OZONE_URL=https://dlcdn.apache.org/ozone/1.2.0/ozone-1.2.0.tar.gz
 WORKDIR /opt
 RUN sudo rm -rf /opt/hadoop && curl -LSs -o ozone.tar.gz $OZONE_URL && tar zxf ozone.tar.gz && rm ozone.tar.gz && mv ozone* hadoop
