@@ -13,8 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM apache/ozone-runner:20191107-1
-ARG OZONE_URL=https://www.apache.org/dyn/mirrors/mirrors.cgi?action=download&filename=hadoop/ozone/ozone-1.0.0/hadoop-ozone-1.0.0.tar.gz
+FROM apache/ozone-runner:20210329-1
+ARG OZONE_URL=https://www.apache.org/dyn/mirrors/mirrors.cgi?action=download&filename=ozone/1.1.0/ozone-1.1.0.tar.gz
 WORKDIR /opt
 RUN sudo rm -rf /opt/hadoop && wget $OZONE_URL -O ozone.tar.gz && tar zxf ozone.tar.gz && rm ozone.tar.gz && mv ozone* hadoop
 WORKDIR /opt/hadoop
@@ -24,4 +24,6 @@ RUN sudo chown -R hadoop:users /opt/hadoop/etc/hadoop
 COPY --chown=hadoop:users start-ozone-all.sh /usr/local/bin/
 COPY --chown=hadoop:users docker-compose.yaml /opt/hadoop/
 COPY --chown=hadoop:users docker-config /opt/hadoop/
+ENV OZONE_CONF_DIR=/etc/hadoop
+ENV OZONE_LOG_DIR=/var/log/hadoop
 CMD ["/usr/local/bin/start-ozone-all.sh"]
