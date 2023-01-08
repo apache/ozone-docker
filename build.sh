@@ -17,11 +17,11 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 set -eu
 mkdir -p build
-if [ ! -d "$DIR/build/apache-rat-0.13" ]; then
+if [ ! -d "$DIR/build/apache-rat-0.15" ]; then
   if type wget 2> /dev/null; then
-    wget "https://dlcdn.apache.org/creadur/apache-rat-0.13/apache-rat-0.13-bin.tar.gz" -O "$DIR/build/apache-rat.tar.gz"
+    wget "https://dlcdn.apache.org/creadur/apache-rat-0.15/apache-rat-0.15-bin.tar.gz" -O "$DIR/build/apache-rat.tar.gz"
   elif type curl 2> /dev/null; then
-    curl -LSs "https://dlcdn.apache.org/creadur/apache-rat-0.13/apache-rat-0.13-bin.tar.gz" -o "$DIR/build/apache-rat.tar.gz"
+    curl -LSs "https://dlcdn.apache.org/creadur/apache-rat-0.15/apache-rat-0.15-bin.tar.gz" -o "$DIR/build/apache-rat.tar.gz"
   else
     exit 1
   fi
@@ -29,6 +29,6 @@ if [ ! -d "$DIR/build/apache-rat-0.13" ]; then
   tar zvxf apache-rat.tar.gz
   cd -
 fi
-java -jar $DIR/build/apache-rat-0.13/apache-rat-0.13.jar $DIR -e .dockerignore -e public -e apache-rat-0.13 -e .git -e .gitignore
+java -jar $DIR/build/apache-rat-0.15/apache-rat-0.15.jar $DIR -e .dockerignore -e public -e apache-rat-0.15 -e .git -e .gitignore
 docker build --build-arg OZONE_URL -t apache/ozone $@ .
-docker tag apache/ozone apache/ozone:1.2.1
+docker tag apache/ozone apache/ozone:1.3.0
