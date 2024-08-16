@@ -15,13 +15,19 @@
 # limitations under the License.
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 set -eu
+
 mkdir -p build
-if [ ! -d "$DIR/build/apache-rat-0.15" ]; then
+
+ozone_version=1.3.0
+rat_version=0.16.1
+
+if [ ! -d "$DIR/build/apache-rat-${rat_version}" ]; then
   if type wget 2> /dev/null; then
-    wget "https://dlcdn.apache.org/creadur/apache-rat-0.15/apache-rat-0.15-bin.tar.gz" -O "$DIR/build/apache-rat.tar.gz"
+    wget "https://dlcdn.apache.org/creadur/apache-rat-${rat_version}/apache-rat-${rat_version}-bin.tar.gz" -O "$DIR/build/apache-rat.tar.gz"
   elif type curl 2> /dev/null; then
-    curl -LSs "https://dlcdn.apache.org/creadur/apache-rat-0.15/apache-rat-0.15-bin.tar.gz" -o "$DIR/build/apache-rat.tar.gz"
+    curl -LSs "https://dlcdn.apache.org/creadur/apache-rat-${rat_version}/apache-rat-${rat_version}-bin.tar.gz" -o "$DIR/build/apache-rat.tar.gz"
   else
     exit 1
   fi
@@ -29,6 +35,8 @@ if [ ! -d "$DIR/build/apache-rat-0.15" ]; then
   tar zvxf apache-rat.tar.gz
   cd -
 fi
-java -jar $DIR/build/apache-rat-0.15/apache-rat-0.15.jar $DIR -e .dockerignore -e public -e apache-rat-0.15 -e .git -e .gitignore
+
+java -jar $DIR/build/apache-rat-${rat_version}/apache-rat-${rat_version}.jar $DIR -e .dockerignore -e public -e apache-rat-${rat_version} -e .git -e .gitignore
+
 docker build --build-arg OZONE_URL -t apache/ozone $@ .
-docker tag apache/ozone apache/ozone:1.3.0
+docker tag apache/ozone apache/ozone:${ozone_version}
