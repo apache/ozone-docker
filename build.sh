@@ -21,7 +21,7 @@ set -eu
 mkdir -p build
 
 ozone_version=1.4.0
-rat_version=0.16
+rat_version=0.16.1
 
 if [ ! -d "$DIR/build/apache-rat-${rat_version}" ]; then
   if type wget 2> /dev/null; then
