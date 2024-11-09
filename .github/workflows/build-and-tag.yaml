@@ -53,7 +53,7 @@ jobs:
       - name: Add Docker Hub to targets
         if: ${{ env.DOCKERHUB_USER }}
         run: |
-          echo "REGISTRIES=${{ env.REGISTRIES}} docker.io" >> $GITHUB_ENV
+          echo "REGISTRIES=${{ env.REGISTRIES }} docker.io" >> $GITHUB_ENV
 
       - name: Pull image
         run: |
