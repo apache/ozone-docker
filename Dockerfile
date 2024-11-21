@@ -16,7 +16,9 @@
 ARG OZONE_RUNNER_IMAGE=apache/ozone-runner
 FROM ${OZONE_RUNNER_IMAGE}:20241108-jdk17-1
 
-ARG OZONE_URL=https://dlcdn.apache.org/ozone/1.4.0/ozone-1.4.0.tar.gz
+ARG OZONE_VERSION=1.4.0
+ARG OZONE_URL="https://www.apache.org/dyn/closer.lua?action=download&filename=ozone/${OZONE_VERSION}/ozone-${OZONE_VERSION}.tar.gz"
+
 WORKDIR /opt
 RUN sudo rm -rf /opt/hadoop && curl -LSs -o ozone.tar.gz $OZONE_URL && tar zxf ozone.tar.gz && rm ozone.tar.gz && mv ozone* hadoop
 
