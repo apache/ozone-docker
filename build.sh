@@ -14,11 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+set -eu -o pipefail
 
-set -eu
-
-ozone_version=1.4.1
-
-docker build --build-arg OZONE_URL -t apache/ozone $@ .
-docker tag apache/ozone apache/ozone:${ozone_version}
+docker build \
+  --build-arg OZONE_RUNNER_IMAGE \
+  --build-arg OZONE_URL \
+  --build-arg OZONE_VERSION \
+  -t apache/ozone:dev \
+  $@ - < Dockerfile
