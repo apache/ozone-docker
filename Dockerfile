@@ -23,7 +23,6 @@ WORKDIR /opt
 RUN sudo rm -rf /opt/hadoop && curl -LSs -o ozone.tar.gz $OZONE_URL && tar zxf ozone.tar.gz && rm ozone.tar.gz && mv ozone* hadoop
 
 WORKDIR /opt/hadoop
-COPY log4j.properties /opt/hadoop/etc/hadoop/log4j.properties
 COPY ozone-site.xml /opt/hadoop/etc/hadoop/ozone-site.xml
 RUN sudo chown -R hadoop:users /opt/hadoop/etc/hadoop
 COPY --chown=hadoop:users start-ozone-all.sh /usr/local/bin/
