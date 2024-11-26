@@ -1,1 +1,8 @@
+.asf.yaml
 build
+build.sh
+.git
+.github
+.gitignore
+NOTICE
+README.md
