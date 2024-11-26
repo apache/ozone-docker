@@ -23,8 +23,6 @@ WORKDIR /opt
 RUN sudo rm -rf /opt/hadoop && curl -LSs -o ozone.tar.gz $OZONE_URL && tar zxf ozone.tar.gz && rm ozone.tar.gz && mv ozone* hadoop
 
 WORKDIR /opt/hadoop
-COPY --chown=hadoop:users docker-compose.yaml /opt/hadoop/
-COPY --chown=hadoop:users docker-config /opt/hadoop/
 ENV OZONE_CONF_DIR=/etc/hadoop
 ENV OZONE_LOG_DIR=/var/log/hadoop
 CMD ["echo","Please check https://github.com/apache/ozone-docker for information."]
