@@ -14,29 +14,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+set -eu -o pipefail
 
-set -eu
-
-mkdir -p build
-
-ozone_version=1.4.1
-rat_version=0.16.1
-
-if [ ! -d "$DIR/build/apache-rat-${rat_version}" ]; then
-  if type wget 2> /dev/null; then
-    wget "https://dlcdn.apache.org/creadur/apache-rat-${rat_version}/apache-rat-${rat_version}-bin.tar.gz" -O "$DIR/build/apache-rat.tar.gz"
-  elif type curl 2> /dev/null; then
-    curl -LSs "https://dlcdn.apache.org/creadur/apache-rat-${rat_version}/apache-rat-${rat_version}-bin.tar.gz" -o "$DIR/build/apache-rat.tar.gz"
-  else
-    exit 1
-  fi
-  cd $DIR/build
-  tar zvxf apache-rat.tar.gz
-  cd -
-fi
-
-java -jar $DIR/build/apache-rat-${rat_version}/apache-rat-${rat_version}.jar $DIR -e .dockerignore -e public -e apache-rat-${rat_version} -e .git -e .gitignore
-
-docker build --build-arg OZONE_URL -t apache/ozone $@ .
-docker tag apache/ozone apache/ozone:${ozone_version}
+docker build \
+  --build-arg OZONE_RUNNER_IMAGE \
+  --build-arg OZONE_RUNNER_VERSION \
+  --build-arg OZONE_URL \
+  --build-arg OZONE_VERSION \
+  -t apache/ozone:dev \
+  $@ - < Dockerfile

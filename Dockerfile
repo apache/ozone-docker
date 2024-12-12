@@ -14,7 +14,8 @@
 # limitations under the License.
 
 ARG OZONE_RUNNER_IMAGE=apache/ozone-runner
-FROM ${OZONE_RUNNER_IMAGE}:20241108-jdk17-1
+ARG OZONE_RUNNER_VERSION=20241108-jdk17-1
+FROM ${OZONE_RUNNER_IMAGE}:${OZONE_RUNNER_VERSION}
 
 ARG OZONE_VERSION=1.4.1
 ARG OZONE_URL="https://www.apache.org/dyn/closer.lua?action=download&filename=ozone/${OZONE_VERSION}/ozone-${OZONE_VERSION}.tar.gz"
@@ -23,12 +24,5 @@ WORKDIR /opt
 RUN sudo rm -rf /opt/hadoop && curl -LSs -o ozone.tar.gz $OZONE_URL && tar zxf ozone.tar.gz && rm ozone.tar.gz && mv ozone* hadoop
 
 WORKDIR /opt/hadoop
-COPY log4j.properties /opt/hadoop/etc/hadoop/log4j.properties
-COPY ozone-site.xml /opt/hadoop/etc/hadoop/ozone-site.xml
-RUN sudo chown -R hadoop:users /opt/hadoop/etc/hadoop
-COPY --chown=hadoop:users start-ozone-all.sh /usr/local/bin/
-COPY --chown=hadoop:users docker-compose.yaml /opt/hadoop/
-COPY --chown=hadoop:users docker-config /opt/hadoop/
-ENV OZONE_CONF_DIR=/etc/hadoop
-ENV OZONE_LOG_DIR=/var/log/hadoop
-CMD ["/usr/local/bin/start-ozone-all.sh"]
+
+CMD ["echo","Please check https://github.com/apache/ozone-docker for information."]

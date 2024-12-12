@@ -1,1 +1,10 @@
+.asf.yaml
 build
+build.sh
+docker-compose.yaml
+docker-config
+.git
+.github
+.gitignore
+NOTICE
+README.md
