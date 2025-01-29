@@ -14,7 +14,7 @@
 # limitations under the License.
 
 ARG OZONE_RUNNER_IMAGE=apache/ozone-runner
-FROM ${OZONE_RUNNER_IMAGE}:20241108-jdk17-1
+FROM ${OZONE_RUNNER_IMAGE}:20241212-1-jdk11
 
 ARG OZONE_VERSION=1.4.1
 ARG OZONE_URL="https://www.apache.org/dyn/closer.lua?action=download&filename=ozone/${OZONE_VERSION}/ozone-${OZONE_VERSION}.tar.gz"
