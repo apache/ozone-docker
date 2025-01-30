@@ -16,7 +16,7 @@
 
 x-image:
    &image
-   image: ${OZONE_IMAGE:-apache/ozone}:${OZONE_IMAGE_VERSION:-1.4.1}${OZONE_IMAGE_FLAVOR:--rocky}
+   image: ${OZONE_IMAGE:-apache/ozone}:${OZONE_IMAGE_VERSION:-1.4.1}${OZONE_IMAGE_FLAVOR:-}
 
 x-common-config:
    &common-config
