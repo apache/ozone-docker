@@ -53,10 +53,10 @@ OZONE_RUNNER_VERSION
 
 ### Testing
 
-The image can be tested locally with the sample Docker Compose definition in this repo, by setting `OZONE_VERSION`:
+The image can be tested locally with the sample Docker Compose definition in this repo, by setting `OZONE_IMAGE_VERSION`:
 
 ```bash
-export OZONE_VERSION=dev
+export OZONE_IMAGE_VERSION=dev
 docker compose up -d --scale datanode=3
 ```
 
