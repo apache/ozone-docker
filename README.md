@@ -15,9 +15,12 @@
   limitations under the License.
 -->
 
-Please use the included docker-compose.yaml to test it:
+# Apache Ozone Docker Image
 
-```
-docker-compose build
-docker-compose up -d
-```
+[ozone](https://github.com/apache/ozone-docker) is built on top of [ozone-runner](https://github.com/apache/ozone-docker-runner), adding the binaries created for official Ozone releases.
+
+These are used for testing compatibility of various Ozone versions, and upgrade from one version to another.  May also be useful for running quick experiments with specific version of Ozone, without the need to download or rebuild it.
+
+Published to [Docker Hub](https://hub.docker.com/r/apache/ozone) and [GitHub](https://github.com/apache/ozone-docker/pkgs/container/ozone).
+
+Images are tagged by Ozone version numbers and optional flavor.  Flavor `-rocky` was introduced when `ozone-runner` was changed from CentOS to Rocky Linux due to CentOS end-of-life, to avoid breaking things for existing users.  Future images will be published only with Rocky Linux, with and without flavor suffix.
