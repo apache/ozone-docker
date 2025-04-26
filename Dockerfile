@@ -14,10 +14,10 @@
 # limitations under the License.
 
 ARG OZONE_RUNNER_IMAGE=apache/ozone-runner
-ARG OZONE_RUNNER_VERSION=20241212-1-jdk21
+ARG OZONE_RUNNER_VERSION=20250410-1-jdk21
 FROM ${OZONE_RUNNER_IMAGE}:${OZONE_RUNNER_VERSION}
 
-ARG OZONE_VERSION=1.4.1
+ARG OZONE_VERSION=2.0.0
 ARG OZONE_URL="https://www.apache.org/dyn/closer.lua?action=download&filename=ozone/${OZONE_VERSION}/ozone-${OZONE_VERSION}.tar.gz"
 
 WORKDIR /opt
