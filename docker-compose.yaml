@@ -29,7 +29,7 @@ x-common-config:
    OZONE-SITE.XML_ozone.replication: "1"
    OZONE-SITE.XML_ozone.scm.block.client.address: "scm"
    OZONE-SITE.XML_ozone.scm.client.address: "scm"
-   OZONE-SITE.XML_ozone.scm.datanode.id.dir: "/data"
+   OZONE-SITE.XML_ozone.scm.datanode.id.dir: "/data/metadata"
    OZONE-SITE.XML_ozone.scm.names: "scm"
    no_proxy: "om,recon,scm,s3g,localhost,127.0.0.1"
 
