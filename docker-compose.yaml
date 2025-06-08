@@ -73,3 +73,14 @@ services:
       environment:
          <<: *common-config
       command: ["ozone","s3g"]
+   httpfs:
+     <<: *image
+     ports:
+       - 14000:14000
+     environment:
+       CORE-SITE.XML_fs.defaultFS: "ofs://om"
+       CORE-SITE.XML_hadoop.proxyuser.hadoop.hosts: "*"
+       CORE-SITE.XML_hadoop.proxyuser.hadoop.groups: "*"
+       OZONE-SITE.XML_hdds.scm.safemode.min.datanode: ${OZONE_SAFEMODE_MIN_DATANODES:-1}
+       <<: *common-config
+     command: [ "ozone","httpfs" ]
