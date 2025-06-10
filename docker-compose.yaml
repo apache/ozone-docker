@@ -77,10 +77,9 @@ services:
          <<: *common-config
       command: ["ozone","s3g"]
    httpfs:
-     <<: *image
-     ports:
-       - 14000:14000
-     environment:
-       OZONE-SITE.XML_hdds.scm.safemode.min.datanode: ${OZONE_SAFEMODE_MIN_DATANODES:-1}
-       <<: *common-config
-     command: [ "ozone","httpfs" ]
+      <<: *image
+      ports:
+         - 14000:14000
+      environment:
+         <<: *common-config
+      command: [ "ozone","httpfs" ]
