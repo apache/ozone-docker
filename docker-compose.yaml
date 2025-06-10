@@ -20,6 +20,9 @@ x-image:
 
 x-common-config:
    &common-config
+   CORE-SITE.XML_fs.defaultFS: "ofs://om"
+   CORE-SITE.XML_hadoop.proxyuser.hadoop.hosts: "*"
+   CORE-SITE.XML_hadoop.proxyuser.hadoop.groups: "*"
    OZONE-SITE.XML_hdds.datanode.dir: "/data/hdds"
    OZONE-SITE.XML_ozone.metadata.dirs: "/data/metadata"
    OZONE-SITE.XML_ozone.om.address: "om"
@@ -78,9 +81,6 @@ services:
      ports:
        - 14000:14000
      environment:
-       CORE-SITE.XML_fs.defaultFS: "ofs://om"
-       CORE-SITE.XML_hadoop.proxyuser.hadoop.hosts: "*"
-       CORE-SITE.XML_hadoop.proxyuser.hadoop.groups: "*"
        OZONE-SITE.XML_hdds.scm.safemode.min.datanode: ${OZONE_SAFEMODE_MIN_DATANODES:-1}
        <<: *common-config
      command: [ "ozone","httpfs" ]
