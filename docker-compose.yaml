@@ -20,9 +20,6 @@ x-image:
 
 x-common-config:
    &common-config
-   CORE-SITE.XML_fs.defaultFS: "ofs://om"
-   CORE-SITE.XML_hadoop.proxyuser.hadoop.hosts: "*"
-   CORE-SITE.XML_hadoop.proxyuser.hadoop.groups: "*"
    OZONE-SITE.XML_hdds.datanode.dir: "/data/hdds"
    OZONE-SITE.XML_ozone.metadata.dirs: "/data/metadata"
    OZONE-SITE.XML_ozone.om.address: "om"
@@ -51,6 +48,8 @@ services:
          - 9874:9874
       environment:
          <<: *common-config
+         CORE-SITE.XML_hadoop.proxyuser.hadoop.hosts: "*"
+         CORE-SITE.XML_hadoop.proxyuser.hadoop.groups: "*"
          ENSURE_OM_INITIALIZED: /data/metadata/om/current/VERSION
          WAITFOR: scm:9876
       command: ["ozone","om"]
@@ -82,4 +81,5 @@ services:
          - 14000:14000
       environment:
          <<: *common-config
+         CORE-SITE.XML_fs.defaultFS: "ofs://om"
       command: [ "ozone","httpfs" ]
