@@ -48,6 +48,8 @@ services:
          - 9874:9874
       environment:
          <<: *common-config
+         CORE-SITE.XML_hadoop.proxyuser.hadoop.hosts: "*"
+         CORE-SITE.XML_hadoop.proxyuser.hadoop.groups: "*"
          ENSURE_OM_INITIALIZED: /data/metadata/om/current/VERSION
          WAITFOR: scm:9876
       command: ["ozone","om"]
@@ -73,3 +75,11 @@ services:
       environment:
          <<: *common-config
       command: ["ozone","s3g"]
+   httpfs:
+      <<: *image
+      ports:
+         - 14000:14000
+      environment:
+         <<: *common-config
+         CORE-SITE.XML_fs.defaultFS: "ofs://om"
+      command: [ "ozone","httpfs" ]
