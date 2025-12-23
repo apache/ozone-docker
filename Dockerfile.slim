@@ -15,28 +15,40 @@
 
 ARG OZONE_RUNNER_IMAGE=apache/ozone-runner
 ARG OZONE_RUNNER_VERSION=20250410-1-jdk21
+FROM ${OZONE_RUNNER_IMAGE}:${OZONE_RUNNER_VERSION}
+
 ARG OZONE_VERSION=2.0.0
 ARG OZONE_URL="https://www.apache.org/dyn/closer.lua?action=download&filename=ozone/${OZONE_VERSION}/ozone-${OZONE_VERSION}.tar.gz"
 
-FROM alpine:latest AS extractor
-ARG OZONE_VERSION
-ARG OZONE_URL
-
-WORKDIR /tmp
-RUN apk add --no-cache curl tar && \
-    curl -LSs -o ozone.tar.gz "$OZONE_URL" && \
-    tar zxf ozone.tar.gz && \
-    cd ozone-${OZONE_VERSION} && \
-    rm -rf docs examples share/doc share/man licenses LICENSE.txt NOTICE.txt README.md HISTORY.md SECURITY.md CONTRIBUTING.md compose kubernetes share/ozone/byteman && \
-    find . -type f \( -name "ozone-filesystem-hadoop2-*.jar" -o -name "ozone-filesystem-hadoop3-*.jar" -o -name "ozone-filesystem-hadoop3-client-*.jar" -o -name "*-tests.jar" -o -name "*-test.jar" -o -name "*test*.jar" -o -name "*-docs-*.jar" -o -name "*-shaded.jar" -o -name "*-all.jar" -o -name "*-fat.jar" \) -delete && \
-    find . -type d \( -name "test*" -o -name "tests" -o -name "*test" -o -name "__pycache__" \) -exec rm -rf {} + 2>/dev/null || true && \
-    find . -type f \( -name "*.md" -o -name "*.txt" -o -name "*.pyc" \) ! -path "*/etc/*" ! -path "*/bin/*" ! -path "*/sbin/*" ! -path "*/libexec/*" -delete 2>/dev/null || true
-
-FROM ${OZONE_RUNNER_IMAGE}:${OZONE_RUNNER_VERSION}
-ARG OZONE_VERSION
-
 WORKDIR /opt
-COPY --from=extractor /tmp/ozone-${OZONE_VERSION} hadoop
+RUN sudo rm -rf /opt/hadoop && \
+    curl -LSs -o ozone.tar.gz $OZONE_URL && \
+    tar zxf ozone.tar.gz && \
+    rm ozone.tar.gz && \
+    mv ozone* hadoop && \
+    cd hadoop && \
+    sudo rm -rf \
+        CONTRIBUTING.md \
+        compose \
+        docs \
+        examples \
+        HISTORY.md \
+        kubernetes \
+        README.md \
+        SECURITY.md \
+        share/doc \
+        share/man \
+        share/ozone/byteman \
+        smoketest \
+        tests && \
+    sudo find . -type f \( \
+        -name "*-all.jar" -o \
+        -name "*-docs-*.jar" -o \
+        -name "*-fat.jar" -o \
+        -name "*-shaded.jar" -o \
+        -name "*test*.jar" -o \
+        -name "ozone-filesystem-hadoop*.jar" \
+    \) -delete
 
 WORKDIR /opt/hadoop
 
