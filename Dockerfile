@@ -25,31 +25,4 @@ RUN sudo rm -rf /opt/hadoop && curl -LSs -o ozone.tar.gz $OZONE_URL && tar zxf o
 
 WORKDIR /opt/hadoop
 
-# Remove unnecessary files to reduce image size (HDDS-13426)
-RUN sudo find . -type f \( \
-        -name "ozone-filesystem-hadoop2-*.jar" -o \
-        -name "ozone-filesystem-hadoop3-*.jar" -o \
-        -name "ozone-filesystem-hadoop3-client-*.jar" -o \
-        -name "*-tests.jar" -o \
-        -name "*-test.jar" -o \
-        -name "*test*.jar" -o \
-        -name "*-docs-*.jar" -o \
-        -name "*-shaded.jar" -o \
-        -name "*-all.jar" -o \
-        -name "*-fat.jar" -o \
-        -name "*.class" -o \
-        -name "*.pyc" -o \
-        -name ".DS_Store" \
-    \) -delete 2>/dev/null || true && \
-    # Remove documentation, examples, and license files
-    sudo rm -rf docs examples share/doc share/man licenses \
-        LICENSE.txt NOTICE.txt README.md HISTORY.md SECURITY.md CONTRIBUTING.md \
-        compose kubernetes/examples share/ozone/byteman 2>/dev/null || true && \
-    # Remove all markdown and text documentation files
-    sudo find . -type f \( -name "*.md" -o -name "*.txt" \) ! -path "*/etc/*" ! -path "*/bin/*" ! -path "*/sbin/*" ! -path "*/libexec/*" -delete 2>/dev/null || true && \
-    # Remove test directories
-    sudo find . -type d \( -name "test*" -o -name "tests" -o -name "*test" \) -exec rm -rf {} + 2>/dev/null || true && \
-    # Remove empty directories
-    sudo find . -type d -empty -delete 2>/dev/null || true
-
 CMD ["echo","Please check https://github.com/apache/ozone-docker for information."]

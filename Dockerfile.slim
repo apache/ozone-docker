@@ -1,0 +1,43 @@
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+ARG OZONE_RUNNER_IMAGE=apache/ozone-runner
+ARG OZONE_RUNNER_VERSION=20250410-1-jdk21
+ARG OZONE_VERSION=2.0.0
+ARG OZONE_URL="https://www.apache.org/dyn/closer.lua?action=download&filename=ozone/${OZONE_VERSION}/ozone-${OZONE_VERSION}.tar.gz"
+
+FROM alpine:latest AS extractor
+ARG OZONE_VERSION
+ARG OZONE_URL
+
+WORKDIR /tmp
+RUN apk add --no-cache curl tar && \
+    curl -LSs -o ozone.tar.gz "$OZONE_URL" && \
+    tar zxf ozone.tar.gz && \
+    cd ozone-${OZONE_VERSION} && \
+    rm -rf docs examples share/doc share/man licenses LICENSE.txt NOTICE.txt README.md HISTORY.md SECURITY.md CONTRIBUTING.md compose kubernetes share/ozone/byteman && \
+    find . -type f \( -name "ozone-filesystem-hadoop2-*.jar" -o -name "ozone-filesystem-hadoop3-*.jar" -o -name "ozone-filesystem-hadoop3-client-*.jar" -o -name "*-tests.jar" -o -name "*-test.jar" -o -name "*test*.jar" -o -name "*-docs-*.jar" -o -name "*-shaded.jar" -o -name "*-all.jar" -o -name "*-fat.jar" \) -delete && \
+    find . -type d \( -name "test*" -o -name "tests" -o -name "*test" -o -name "__pycache__" \) -exec rm -rf {} + 2>/dev/null || true && \
+    find . -type f \( -name "*.md" -o -name "*.txt" -o -name "*.pyc" \) ! -path "*/etc/*" ! -path "*/bin/*" ! -path "*/sbin/*" ! -path "*/libexec/*" -delete 2>/dev/null || true
+
+FROM ${OZONE_RUNNER_IMAGE}:${OZONE_RUNNER_VERSION}
+ARG OZONE_VERSION
+
+WORKDIR /opt
+COPY --from=extractor /tmp/ozone-${OZONE_VERSION} hadoop
+
+WORKDIR /opt/hadoop
+
+CMD ["echo","Please check https://github.com/apache/ozone-docker for information."]
