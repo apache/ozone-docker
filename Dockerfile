@@ -36,19 +36,12 @@ RUN sudo rm -rf /opt/hadoop && \
         kubernetes \
         README.md \
         SECURITY.md \
-        share/doc \
-        share/man \
         share/ozone/byteman \
         smoketest \
         tests && \
-    sudo find . -type f \( \
-        -name "*-all.jar" -o \
-        -name "*-docs-*.jar" -o \
-        -name "*-fat.jar" -o \
-        -name "*-shaded.jar" -o \
-        -name "*test*.jar" -o \
-        -name "ozone-filesystem-hadoop*.jar" \
-    \) -delete
+    sudo rm -f \
+        share/ozone/lib/*-docs-*.jar \
+        share/ozone/lib/ozone-filesystem-hadoop*.jar
 
 WORKDIR /opt/hadoop
 
