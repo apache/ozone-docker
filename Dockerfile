@@ -14,14 +14,41 @@
 # limitations under the License.
 
 ARG OZONE_RUNNER_IMAGE=apache/ozone-runner
-ARG OZONE_RUNNER_VERSION=20250410-1-jdk21
+ARG OZONE_RUNNER_VERSION=20251225-1-jdk21-slim
 FROM ${OZONE_RUNNER_IMAGE}:${OZONE_RUNNER_VERSION}
 
 ARG OZONE_VERSION=2.0.0
 ARG OZONE_URL="https://www.apache.org/dyn/closer.lua?action=download&filename=ozone/${OZONE_VERSION}/ozone-${OZONE_VERSION}.tar.gz"
 
 WORKDIR /opt
-RUN sudo rm -rf /opt/hadoop && curl -LSs -o ozone.tar.gz $OZONE_URL && tar zxf ozone.tar.gz && rm ozone.tar.gz && mv ozone* hadoop
+RUN sudo rm -rf /opt/hadoop && \
+    curl -LSs -o ozone.tar.gz $OZONE_URL && \
+    tar zxf ozone.tar.gz && \
+    rm ozone.tar.gz && \
+    mv ozone* hadoop && \
+    cd hadoop && \
+    sudo rm -rf \
+        CONTRIBUTING.md \
+        compose \
+        docs \
+        examples \
+        HISTORY.md \
+        kubernetes \
+        README.md \
+        SECURITY.md \
+        share/doc \
+        share/man \
+        share/ozone/byteman \
+        smoketest \
+        tests && \
+    sudo find . -type f \( \
+        -name "*-all.jar" -o \
+        -name "*-docs-*.jar" -o \
+        -name "*-fat.jar" -o \
+        -name "*-shaded.jar" -o \
+        -name "*test*.jar" -o \
+        -name "ozone-filesystem-hadoop*.jar" \
+    \) -delete
 
 WORKDIR /opt/hadoop
 
