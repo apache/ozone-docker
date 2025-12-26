@@ -14,7 +14,7 @@
 # limitations under the License.
 
 ARG OZONE_RUNNER_IMAGE=apache/ozone-runner
-ARG OZONE_RUNNER_VERSION=20251225-1-jdk21-slim
+ARG OZONE_RUNNER_VERSION=20251226-1-jdk21-slim
 FROM ${OZONE_RUNNER_IMAGE}:${OZONE_RUNNER_VERSION}
 
 ARG OZONE_VERSION=2.0.0
@@ -37,11 +37,10 @@ RUN sudo rm -rf /opt/hadoop && \
         README.md \
         SECURITY.md \
         share/ozone/byteman \
-        smoketest \
-        tests && \
-    sudo rm -f \
         share/ozone/lib/*-docs-*.jar \
-        share/ozone/lib/ozone-filesystem-hadoop*.jar
+        share/ozone/lib/ozone-filesystem-hadoop*.jar \
+        smoketest \
+        tests
 
 WORKDIR /opt/hadoop
 
