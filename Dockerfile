@@ -14,14 +14,33 @@
 # limitations under the License.
 
 ARG OZONE_RUNNER_IMAGE=apache/ozone-runner
-ARG OZONE_RUNNER_VERSION=20250410-1-jdk21
+ARG OZONE_RUNNER_VERSION=20251226-2-jdk21-slim
 FROM ${OZONE_RUNNER_IMAGE}:${OZONE_RUNNER_VERSION}
 
 ARG OZONE_VERSION=2.0.0
 ARG OZONE_URL="https://www.apache.org/dyn/closer.lua?action=download&filename=ozone/${OZONE_VERSION}/ozone-${OZONE_VERSION}.tar.gz"
 
 WORKDIR /opt
-RUN sudo rm -rf /opt/hadoop && curl -LSs -o ozone.tar.gz $OZONE_URL && tar zxf ozone.tar.gz && rm ozone.tar.gz && mv ozone* hadoop
+RUN sudo rm -rf /opt/hadoop && \
+    curl -LSs -o ozone.tar.gz $OZONE_URL && \
+    tar zxf ozone.tar.gz && \
+    rm ozone.tar.gz && \
+    mv ozone* hadoop && \
+    cd hadoop && \
+    sudo rm -rf \
+        CONTRIBUTING.md \
+        compose \
+        docs \
+        examples \
+        HISTORY.md \
+        kubernetes \
+        README.md \
+        SECURITY.md \
+        share/ozone/byteman \
+        share/ozone/lib/*-docs-*.jar \
+        share/ozone/lib/ozone-filesystem-hadoop*.jar \
+        smoketest \
+        tests
 
 WORKDIR /opt/hadoop
 
