@@ -41,7 +41,7 @@ jobs:
       REGISTRIES: ghcr.io # docker.io is appended dynamically
     steps:
       - name: Generate tags
-        uses: docker/metadata-action@030e881283bb7a6894de51c315a6bfe6a94e05cf
+        uses: docker/metadata-action@030e881283bb7a6894de51c315a6bfe6a94e05cf # v6.0.0
         with:
           images: |
             ${{ github.repository_owner }}/ozone
@@ -60,7 +60,7 @@ jobs:
           docker pull "$IMAGE_ID"
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2
+        uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 # v4.0.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
@@ -68,7 +68,7 @@ jobs:
 
       - name: Login to Docker Hub
         if: ${{ env.DOCKERHUB_USER }}
-        uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2
+        uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 # v4.0.0
         with:
           username: ${{ env.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
