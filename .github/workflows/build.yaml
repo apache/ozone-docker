@@ -23,6 +23,7 @@ on:
     types: [opened, ready_for_review, synchronize]
   push:
     branches-ignore:
+      - 'dependabot/**'
       - 'ozone-**'
   workflow_call:
     outputs:
