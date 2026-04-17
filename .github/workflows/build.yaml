@@ -35,16 +35,17 @@ concurrency:
   group: ${{ github.sha }}
   cancel-in-progress: false
 
-permissions:
-  contents: read
-  packages: write
-
 env:
   OZONE_RUNNER_IMAGE: ghcr.io/apache/ozone-runner
+
+permissions: { }
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     outputs:
       image-id: ${{ steps.meta.outputs.tags }}
     steps:
