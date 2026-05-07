@@ -23,7 +23,7 @@ For one-off tweaks at runtime, you can override individual properties without re
 
 ## Override via mounted config
 
-Create your own `ozone-site.xml` that contains only the properties you want to change, then mount it on top of the baked-in copy:
+Mounting a file over `/etc/hadoop/ozone-site.xml` fully replaces the baked-in copy, so start by copying [`conf/ozone-site.xml`](conf/ozone-site.xml), edit the properties you want to change, then mount your version:
 
 ```bash
 docker run -d \
@@ -35,5 +35,3 @@ docker run -d \
   -v ozone-logs:/var/log/hadoop \
   apache/ozone:all-in-one
 ```
-
-> **Note**: When you mount over `ozone-site.xml`, it fully replaces the baked-in file. Copy the original from [`conf/ozone-site.xml`](conf/ozone-site.xml) and edit only what you need.
