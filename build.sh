@@ -17,9 +17,8 @@
 set -eu -o pipefail
 
 docker build \
-  --build-arg OZONE_RUNNER_IMAGE \
-  --build-arg OZONE_RUNNER_VERSION \
-  --build-arg OZONE_URL \
+  --build-arg OZONE_IMAGE \
+  --build-arg OZONE_IMAGE_VERSION \
   --build-arg OZONE_VERSION \
-  -t apache/ozone:dev \
-  $@ - < Dockerfile
+  -t apache/ozone:all-in-one \
+  "$@" .

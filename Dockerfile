@@ -13,35 +13,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ARG OZONE_RUNNER_IMAGE=apache/ozone-runner
-ARG OZONE_RUNNER_VERSION=20260206-2-jdk21-slim
-FROM ${OZONE_RUNNER_IMAGE}:${OZONE_RUNNER_VERSION}
-
 ARG OZONE_VERSION=2.1.0
-ARG OZONE_URL="https://www.apache.org/dyn/closer.lua?action=download&filename=ozone/${OZONE_VERSION}/ozone-${OZONE_VERSION}.tar.gz"
+ARG OZONE_IMAGE=apache/ozone
+ARG OZONE_IMAGE_VERSION=${OZONE_VERSION}-slim
 
-WORKDIR /opt
-RUN sudo rm -rf /opt/hadoop && \
-    curl -LSs -o ozone.tar.gz $OZONE_URL && \
-    tar zxf ozone.tar.gz && \
-    rm ozone.tar.gz && \
-    mv ozone* hadoop && \
-    cd hadoop && \
-    sudo rm -rf \
-        CONTRIBUTING.md \
-        compose \
-        docs \
-        examples \
-        HISTORY.md \
-        kubernetes \
-        README.md \
-        SECURITY.md \
-        share/ozone/byteman \
-        share/ozone/lib/*-docs-*.jar \
-        share/ozone/lib/ozone-filesystem-hadoop*.jar \
-        smoketest \
-        tests
+FROM ${OZONE_IMAGE}:${OZONE_IMAGE_VERSION}
 
-WORKDIR /opt/hadoop
+ENV OZONE_CONF_DIR=/etc/hadoop \
+    OZONE_LOG_DIR=/var/log/hadoop \
+    no_proxy=localhost,127.0.0.1
 
-CMD ["echo","Please check https://github.com/apache/ozone-docker for information."]
+USER root
+
+# Install pre-baked Ozone configuration and create data/log dirs owned by hadoop.
+COPY conf/core-site.xml conf/ozone-site.xml /etc/hadoop/
+RUN mkdir -p /data/metadata /data/hdds /var/log/hadoop \
+    && chown -R hadoop:hadoop /data /var/log/hadoop \
+    && chmod -R 755 /data
+
+# Only S3 Gateway and Recon are user-facing in the quickstart.
+EXPOSE 9878 9888
+
+VOLUME ["/data/metadata", "/data/hdds", "/var/log/hadoop"]
+
+COPY --chmod=755 start-all-services.sh /usr/local/bin/start-all-services.sh
+
+USER hadoop
+
+CMD ["/usr/local/bin/start-all-services.sh"]
