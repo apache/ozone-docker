@@ -18,19 +18,6 @@
 set -e
 
 echo "Starting Ozone Container..."
-
-# Only do initial setup if running as root
-if [ "$(id -u)" = "0" ]; then
-    echo "Setting up directories with proper permissions..."
-    mkdir -p /data/metadata /data/hdds /var/log/hadoop
-    chown -R hadoop:hadoop /data/metadata /data/hdds /var/log/hadoop
-    chmod -R 755 /data
-    
-    # Switch to hadoop user and re-execute this script
-    exec su -s /bin/bash hadoop -c "$0"
-fi
-
-# From here on, we're running as the hadoop user
 echo "Running as user: $(whoami)"
 
 # Initialize SCM if not already initialized
@@ -94,14 +81,14 @@ for i in {1..90}; do
         echo "Ozone is ready"
         break
     fi
-    
+
     # Show progress every 10 seconds
     if [ $((i % 5)) -eq 0 ]; then
         if echo "$safemode_output" | grep -q "SCM is in safe mode"; then
             echo "  Status: Waiting for Ozone to be ready"
         fi
     fi
-    
+
     if [ $i -eq 90 ]; then
         echo "Ozone did not exit safe mode within 180 seconds"
         echo "Current safe mode status:"
@@ -147,4 +134,3 @@ wait -n $SCM_PID $OM_PID $DN_PID $S3G_PID $RECON_PID $HTTPFS_PID
 # If any process exits, shutdown all
 echo "Ozone exited unexpectedly. Shutting down..."
 shutdown
-

@@ -36,7 +36,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  OZONE_RUNNER_IMAGE: ghcr.io/apache/ozone-runner
+  OZONE_IMAGE: ghcr.io/apache/ozone
 
 permissions: { }
 
@@ -92,7 +92,7 @@ jobs:
         if: ${{ steps.pull.outputs.success == 'false' }}
         uses: docker/build-push-action@bcafcacb16a39f128d818304e6c9c0c18556b85f # v7.1.0
         with:
-          build-args: OZONE_RUNNER_IMAGE
+          build-args: OZONE_IMAGE
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
