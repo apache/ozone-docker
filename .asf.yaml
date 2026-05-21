@@ -36,8 +36,9 @@ github:
       branches:
         includes:
           - "~DEFAULT_BRANCH"
-          - "release/*"
-          - "rel/*"
+          - "all-in-one"
+          - "ozone-*"
+          - "slim"
         excludes: []
       bypass_teams:
         - root
