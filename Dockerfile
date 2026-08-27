@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ARG OZONE_VERSION=2.2.0
+ARG OZONE_VERSION=2.2.1
 ARG OZONE_IMAGE=apache/ozone
 ARG OZONE_IMAGE_VERSION=${OZONE_VERSION}-slim
 
