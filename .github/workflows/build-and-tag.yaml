@@ -35,7 +35,7 @@ jobs:
 
   tag:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     env:
       DOCKERHUB_USER: ${{ secrets.DOCKERHUB_USER }}
       IMAGE_ID: ${{ needs.build.outputs.image-id }}
