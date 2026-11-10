@@ -21,10 +21,16 @@ name: build
 on:
   pull_request:
     types: [opened, ready_for_review, synchronize]
+    paths:
+      - Dockerfile
+      - .github/workflows/build.yaml
   push:
     branches-ignore:
       - 'dependabot/**'
       - 'ozone-**'
+    paths:
+      - Dockerfile
+      - .github/workflows/build.yaml
   workflow_call:
     outputs:
       image-id:

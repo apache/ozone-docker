@@ -23,6 +23,10 @@ on:
   push:
     branches:
       - 'ozone-**'
+    paths:
+      - Dockerfile
+      - .github/workflows/build.yaml
+      - .github/workflows/build-and-tag.yaml
 
 permissions: { }
 
